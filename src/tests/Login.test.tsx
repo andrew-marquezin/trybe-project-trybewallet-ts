@@ -19,6 +19,8 @@ describe('Testa as funcionalidades da Login Page', () => {
       wallet: {
         currencies: [],
         expenses: [],
+        editor: false,
+        editingId: 0,
       },
     };
 
