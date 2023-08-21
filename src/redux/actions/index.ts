@@ -1,4 +1,4 @@
-import { Expenses } from '../../types';
+import { ExpensesType } from '../../types';
 
 export const UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
 export const SAVE_CURRENCIES = 'SAVE_CURRENCIES';
@@ -18,7 +18,7 @@ export const saveCurrencies = (currencies: string[]) => {
   };
 };
 
-export const saveExpense = (expense: Expenses) => {
+export const saveExpense = (expense: ExpensesType) => {
   return {
     type: SAVE_EXPENSE,
     payload: expense,

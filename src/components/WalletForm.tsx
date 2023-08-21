@@ -1,23 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { ReduxState } from '../types';
+import { ReduxStateType } from '../types';
 import { getCurrencies } from '../services/api';
-import { saveCurrencies } from '../redux/actions';
+import { saveCurrencies, saveExpense } from '../redux/actions';
 
 function WalletForm() {
-  const { wallet } = useSelector((state: ReduxState) => state);
+  const { wallet } = useSelector((state: ReduxStateType) => state);
   const { currencies } = wallet;
+  // const expensesArr = wallet.expenses;
 
   const INITIAL_VALUES = {
     id: 0,
-    value: 0,
+    value: '',
     description: '',
     currency: currencies[0],
-    payMethod: 'Dinheiro',
+    method: 'Dinheiro',
     tag: 'Alimentação',
+    exchangeRates: {},
   };
 
-  const [expenses, setExpenses] = useState(INITIAL_VALUES);
+  const [expense, setExpense] = useState(INITIAL_VALUES);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,8 +27,8 @@ function WalletForm() {
       const data = await getCurrencies();
       const fCurrencies = Object.keys(data).filter((c) => (c !== 'USDT'));
       dispatch(saveCurrencies(fCurrencies));
-      setExpenses({
-        ...expenses,
+      setExpense({
+        ...expense,
         currency: fCurrencies[0],
       });
     };
@@ -36,16 +38,23 @@ function WalletForm() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const { name, value: inputValue } = e.target;
-    setExpenses({
-      ...expenses,
-      [name]: inputValue,
+    const { name, value } = e.target;
+    setExpense({
+      ...expense,
+      [name]: value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(expenses);
+    const data = await getCurrencies();
+    dispatch(saveExpense({ ...expense, exchangeRates: data }));
+    setExpense({
+      ...expense,
+      value: '',
+      description: '',
+      id: expense.id + 1,
+    });
   };
 
   return (
@@ -58,7 +67,7 @@ function WalletForm() {
             id="value-input"
             data-testid="value-input"
             name="value"
-            value={ expenses.value }
+            value={ expense.value }
             onChange={ handleChange }
           />
         </label>
@@ -69,7 +78,7 @@ function WalletForm() {
             type="text"
             data-testid="description-input"
             name="description"
-            value={ expenses.description }
+            value={ expense.description }
             onChange={ handleChange }
             id="description-input"
           />
@@ -95,7 +104,7 @@ function WalletForm() {
             data-testid="method-input"
             id="method-input"
             onChange={ handleChange }
-            name="payMethod"
+            name="method"
           >
             <option value="Dinheiro">Dinheiro</option>
             <option value="Cartão de crédito">Cartão de crédito</option>
