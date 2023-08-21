@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
-import { SAVE_CURRENCIES, SAVE_EXPENSE } from '../actions';
+import { DELETE_EXPENSE, SAVE_CURRENCIES, SAVE_EXPENSE } from '../actions';
+import { ExpensesType } from '../../types';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -18,6 +19,11 @@ const wallet = (state = INITIAL_STATE, action: AnyAction) => {
         ...state,
         expenses: [...state.expenses,
           action.payload],
+      });
+    case DELETE_EXPENSE:
+      return ({
+        ...state,
+        expenses: state.expenses.filter((e: ExpensesType) => e.id !== action.payload),
       });
     default: return state;
   }

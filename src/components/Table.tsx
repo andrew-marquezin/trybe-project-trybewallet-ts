@@ -1,8 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReduxStateType } from '../types';
+import { deleteExpense } from '../redux/actions';
 
 function Table() {
   const { expenses } = useSelector((state: ReduxStateType) => state.wallet);
+  const dispatch = useDispatch();
 
   return (
     <table>
@@ -33,8 +35,17 @@ function Table() {
               <td>{(cambio * Number(e.value)).toFixed(2)}</td>
               <td>Real</td>
               <td>
-                <button>i</button>
-                <button>x</button>
+                <button
+                  data-testid="edit-btn"
+                >
+                  i
+                </button>
+                <button
+                  data-testid="delete-btn"
+                  onClick={ () => dispatch(deleteExpense(e.id)) }
+                >
+                  Excluir
+                </button>
               </td>
             </tr>
           );
