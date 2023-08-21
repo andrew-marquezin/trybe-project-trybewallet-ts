@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { applyMiddleware, legacy_createStore as createStore, Store } from 'redux';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import thunk from 'redux-thunk';
 import rootReducer from '../../redux/reducers';
 
@@ -45,6 +46,7 @@ export function renderWithRedux(component: React.ReactElement, options: Options 
 
   return {
     ...render(withRedux(component, store)),
+    user: userEvent.setup(),
     store,
   };
 }
