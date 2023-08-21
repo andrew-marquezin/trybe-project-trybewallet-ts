@@ -4,6 +4,7 @@ export const UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
 export const SAVE_CURRENCIES = 'SAVE_CURRENCIES';
 export const SAVE_EXPENSE = 'SABE_EXPENSES';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
+export const SELECT_EDITING_EXPENSE = 'SELECT_EDITING_EXPENSE';
 
 export const userAction = (userEmail: string) => {
   return {
@@ -30,5 +31,15 @@ export const deleteExpense = (id: number) => {
   return {
     type: DELETE_EXPENSE,
     payload: id,
+  };
+};
+
+export const selectEditingExpense = (editor:boolean, editingId: number) => {
+  return {
+    type: SELECT_EDITING_EXPENSE,
+    payload: {
+      editor,
+      editingId,
+    },
   };
 };
