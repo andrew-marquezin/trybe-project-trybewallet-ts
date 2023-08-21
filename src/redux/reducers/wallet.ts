@@ -39,8 +39,6 @@ const wallet = (state = INITIAL_STATE, action: AnyAction) => {
         editor: action.payload.editor,
         editingId: action.payload.editingId,
       });
-      // trocando o valor de editor e editingId aqui o formulario tem que mudar para edicao
-      // e depois criar a acao de atualizar a expense aqui
     case EDIT_EXPENSE:
       return ({
         ...state,
