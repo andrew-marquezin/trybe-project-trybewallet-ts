@@ -7,7 +7,8 @@ import { saveCurrencies, saveExpense } from '../redux/actions';
 function WalletForm() {
   const { wallet } = useSelector((state: ReduxStateType) => state);
   const { currencies } = wallet;
-  // const expensesArr = wallet.expenses;
+  const editingForm = wallet.editor;
+  const expensesArr = wallet.expenses;
 
   const INITIAL_VALUES = {
     id: 0,
@@ -47,14 +48,30 @@ function WalletForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = await getCurrencies();
-    dispatch(saveExpense({ ...expense, exchangeRates: data }));
-    setExpense({
-      ...expense,
-      value: '',
-      description: '',
-      id: expense.id + 1,
-    });
+    if (!editingForm) {
+      const data = await getCurrencies();
+      dispatch(saveExpense({ ...expense, exchangeRates: data }));
+      setExpense({
+        ...expense,
+        value: '',
+        description: '',
+        id: expense.id + 1,
+      });
+    } else {
+      const editedExpensesList = expensesArr.map((item) => {
+        if (item.id === wallet.editingId) {
+          return {
+            id: item.id,
+            value: item.value,
+            description: item.description,
+            currency: item.currency,
+            method: item.method,
+            tag: item.tag,
+            exchangeRates: item.exchangeRates,
+          };
+        } return item;
+      });
+    }
   };
 
   return (
@@ -128,7 +145,7 @@ function WalletForm() {
           </select>
 
           <button>
-            Adicionar despesa
+            {editingForm ? 'Editar despesa' : 'Adicionar despesa'}
           </button>
         </label>
       </form>

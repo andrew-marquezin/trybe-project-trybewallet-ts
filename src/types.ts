@@ -5,6 +5,8 @@ export type UserStateType = {
 export type WalletStateType = {
   currencies: string[];
   expenses: ExpensesType[];
+  editor: boolean,
+  editingId: number,
 };
 
 export type ReduxStateType = {
