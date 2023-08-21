@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxStateType } from '../types';
-import { deleteExpense } from '../redux/actions';
+import { deleteExpense, selectEditingExpense } from '../redux/actions';
 
 function Table() {
   const { expenses } = useSelector((state: ReduxStateType) => state.wallet);
@@ -37,8 +37,9 @@ function Table() {
               <td>
                 <button
                   data-testid="edit-btn"
+                  onClick={ () => dispatch(selectEditingExpense(true, e.id)) }
                 >
-                  i
+                  Editar
                 </button>
                 <button
                   data-testid="delete-btn"

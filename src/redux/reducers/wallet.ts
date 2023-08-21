@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux';
 import {
   DELETE_EXPENSE,
+  EDIT_EXPENSE,
   SAVE_CURRENCIES,
   SAVE_EXPENSE,
   SELECT_EDITING_EXPENSE,
@@ -40,6 +41,12 @@ const wallet = (state = INITIAL_STATE, action: AnyAction) => {
       });
       // trocando o valor de editor e editingId aqui o formulario tem que mudar para edicao
       // e depois criar a acao de atualizar a expense aqui
+    case EDIT_EXPENSE:
+      return ({
+        ...state,
+        expenses: [...action.payload],
+        editor: false,
+      });
     default: return state;
   }
 };

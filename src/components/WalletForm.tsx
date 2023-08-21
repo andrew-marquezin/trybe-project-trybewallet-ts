@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { ReduxStateType } from '../types';
 import { getCurrencies } from '../services/api';
-import { saveCurrencies, saveExpense } from '../redux/actions';
+import { editExpense, saveCurrencies, saveExpense } from '../redux/actions';
 
 function WalletForm() {
   const { wallet } = useSelector((state: ReduxStateType) => state);
@@ -43,6 +43,9 @@ function WalletForm() {
     setExpense({
       ...expense,
       [name]: value,
+      id: expensesArr.length === 0
+        ? 0
+        : wallet.expenses[expensesArr.length - 1].id + 1,
     });
   };
 
@@ -55,21 +58,24 @@ function WalletForm() {
         ...expense,
         value: '',
         description: '',
-        id: expense.id + 1,
       });
     } else {
       const editedExpensesList = expensesArr.map((item) => {
-        if (item.id === wallet.editingId) {
-          return {
-            id: item.id,
-            value: item.value,
-            description: item.description,
-            currency: item.currency,
-            method: item.method,
-            tag: item.tag,
-            exchangeRates: item.exchangeRates,
-          };
-        } return item;
+        return item.id === wallet.editingId ? {
+          id: item.id,
+          value: expense.value,
+          description: expense.description,
+          currency: expense.currency,
+          method: expense.method,
+          tag: expense.tag,
+          exchangeRates: item.exchangeRates,
+        } : item;
+      });
+      dispatch(editExpense(editedExpensesList));
+      setExpense({
+        ...expense,
+        value: '',
+        description: '',
       });
     }
   };
